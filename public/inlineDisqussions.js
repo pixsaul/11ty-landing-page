@@ -163,7 +163,7 @@ var disqus_url;
     disqus_url = source.attr('data-disqus-url');
 
     if (window.DISQUS) {
-      // If Disqus exists, call it's reset method with new parameters.
+      // If Disqus exists, call its reset method with new parameters.
       DISQUS.reset({
         reload: true,
         config: function () {
