@@ -99,5 +99,9 @@
 @media only screen and (max-width: 600px) {
   .disqussion {
       left: 14px !important;
-    }    
+      transform: translateY(-36px) !important;
+    }
+  .disqus_thread {
+    opacity: 0.99;
+  }      
   }
