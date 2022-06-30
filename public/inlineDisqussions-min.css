@@ -92,7 +92,8 @@
     }
   .disqus_thread {
     opacity: 0.99 !important;
-    -webkit-transform: translate(-28px, 22px) !important;
-    transform: translate(-28px, 22px) !important;
+    -webkit-transform: translate(-27px, 24px) !important;
+    transform: translate(-27px, 24px) !important;
+    background: #eee;
   }      
   }
