@@ -57,9 +57,14 @@ header, article {
 	width:  700px;
 	max-width: 100vw;
 	padding: 24px;
-	margin-left: auto;
 	margin-right: auto;
 	box-sizing: border-box;
+}
+
+@media only screen and (min-width: 1000px) {
+	header, article {
+		margin-left: auto;
+	}
 }
 
 @media only screen and (min-width: 900px) {
