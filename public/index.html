@@ -136,18 +136,17 @@
 
 <script>
 
-$('body').imagesLoaded( function() {
-
-	jQuery("p.comment").inlineDisqussions({
-		identifier: 'yahasai',
-		displayCount: true,
-		highlighted: false,
-		position: 'right',
-		background: 'white',
-		maxWidth: 9999
+disqus_shortname = 'comments-prototype';
+  jQuery(document).ready(function() {
+	$('body').imagesLoaded( function() {
+  
+		jQuery("p.comment").inlineDisqussions({
+			position: 'right',
+			displayCount: true
+		});
+		
 	});
-	
-});
+  });
 
 </script>
 
