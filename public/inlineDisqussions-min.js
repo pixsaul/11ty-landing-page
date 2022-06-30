@@ -1,1 +1,291 @@
-var disqus_shortname,disqus_identifier,disqus_url;!function($){var i={};$.fn.extend({inlineDisqussions:function(e){i=$.extend({},{identifier:"disqussion",displayCount:!0,highlighted:!1,position:"right",background:"white",maxWidth:9999},e),0===$("#disqussions_wrapper").length&&$('<div id="disqussions_wrapper"></div>').appendTo($("body")),0===$("#disqus_thread").length?$('<div id="disqus_thread"></div>').appendTo("#disqussions_wrapper"):t(),i.highlighted&&$('<div id="disqussions_overlay"></div>').appendTo($("body")),$(this).each((function(i){s(i,$(this))})),i.displayCount&&a(),$("html").click((function(i){0===$(i.target).parents("#disqussions_wrapper, .main-disqussion-link-wrp").length&&d()}))}});var s=function(s,t){var a;if(t.attr("data-disqus-identifier"))a=t.attr("data-disqus-identifier");else{for(;$('[data-disqus-identifier="'+window.location.pathname+i.identifier+"-"+s+'"]').length>0;)s++;a=window.location.pathname+i.identifier+"-"+s}var o=i.highlighted?"disqussion-link disqussion-highlight":"disqussion-link",r=$('<a class="'+o+'" />').attr("href",window.location.pathname+i.identifier+"-"+s+"#disqus_thread").attr("data-disqus-identifier",a).attr("data-disqus-url",window.location.href+i.identifier+"-"+s).attr("data-disqus-position",i.position).text("+").wrap('<div class="disqussion" />').parent().appendTo("#disqussions_wrapper");r.css({top:t.offset().top,left:"right"==i.position?t.offset().left+t.outerWidth():t.offset().left-r.outerWidth()}),t.attr("data-disqus-identifier",a).mouseover((function(){r.addClass("hovered")})).mouseout((function(){r.removeClass("hovered")})),r.delegate("a.disqussion-link","click",(function(i){i.preventDefault(),$(this).is(".active")?(i.stopPropagation(),d()):e($(this),(function(i){n(i)}))}))},t=function(){0===$("a.main-disqussion-link").length&&$('<a class="main-disqussion-link" />').attr("href",window.location.pathname+"#disqus_thread").text("Comments").wrap('<h2 class="main-disqussion-link-wrp" />').parent().insertBefore("#disqus_thread").delegate("a.main-disqussion-link","click",(function(i){i.preventDefault(),$(this).is(".active")?i.stopPropagation():e($(this),(function(i){n(i,!0)}))}))},e=function(i,s){if(disqus_identifier=i.attr("data-disqus-identifier"),disqus_url=i.attr("data-disqus-url"),window.DISQUS)DISQUS.reset({reload:!0,config:function(){this.page.identifier=disqus_identifier,this.page.url=disqus_url}});else{var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+disqus_shortname+".disqus.com/embed.js",$("head").append(t)}$("a.disqussion-link, a.main-disqussion-link").removeClass("active").filter(i).addClass("active"),i.is(".disqussion-highlight")&&o(disqus_identifier),s(i)},a=function(){if(!$('script[src*="disqus.com/count.js"]').length){var i=document.createElement("script");i.type="text/javascript",i.async=!0,i.src="//"+disqus_shortname+".disqus.com/count.js",$("head").append(i);var s=0,t=setInterval((function(){s++,"object"==typeof DISQUSWIDGETS&&($(".disqussion-link").filter((function(){return $(this).text().match(/[1-9]/g)})).addClass("has-comments"),clearInterval(t)),s>10&&clearInterval(t)}),1e3)}},n=function(s,t){var e={};!0===t?($("#disqus_thread").removeClass("positioned"),e={position:"static",width:"auto"}):($("#disqus_thread").addClass("positioned"),e={position:"absolute"}),e.backgroundColor=i.background;var a={};"right"==s.attr("data-disqus-position")?a={top:s.offset().top,left:s.offset().left+s.outerWidth(),width:Math.min(parseInt($(window).width()-(s.offset().left+s.outerWidth()),10),i.maxWidth)}:"left"==s.attr("data-disqus-position")&&(a={top:s.offset().top,left:s.offset().left-Math.min(parseInt(s.offset().left,10),i.maxWidth),width:Math.min(parseInt(s.offset().left,10),i.maxWidth)}),$("#disqus_thread").stop().fadeIn("fast").animate(a,"fast").css(e)},d=function(){$("#disqus_thread").stop().fadeOut("fast"),$("a.disqussion-link").removeClass("active"),$("#disqussions_overlay").fadeOut("fast"),$("body").removeClass("disqussion-highlight"),$("[data-disqus-identifier]").removeClass("disqussion-highlighted")},o=function(i){$("body").addClass("disqussion-highlight"),$("#disqussions_overlay").fadeIn("fast"),$("[data-disqus-identifier]").removeClass("disqussion-highlighted").filter('[data-disqus-identifier="'+i+'"]:not(".disqussion-link")').addClass("disqussion-highlighted")}}(jQuery);
+/*
+ *  inlineDisqussions
+ *  By Tsachi Shlidor ( @shlidor )
+ *  Inspired by http://mystrd.at/articles/multiple-disqus-threads-on-one-page/
+ *
+ *  USAGE:
+ *
+ *       disqus_shortname = 'your_disqus_shortname';
+ *       $(document).ready(function() {
+ *         $("p").inlineDisqussions(options);
+ *       });
+ *
+ *  See https://github.com/tsi/inlineDisqussions for more info.
+ */
+
+// Disqus global vars.
+var disqus_shortname;
+var disqus_identifier;
+var disqus_url;
+
+(function($) {
+
+  var settings = {};
+
+  $.fn.extend({
+    inlineDisqussions: function(options) {
+
+      // Set up defaults
+      var defaults = {
+        identifier: 'disqussion',
+        displayCount: true,
+        highlighted: false,
+        position: 'right',
+        background: 'white',
+        maxWidth: 9999
+      };
+
+      // Overwrite default options with user provided ones.
+      settings = $.extend({}, defaults, options);
+
+      // Append #disqus_thread to body if it doesn't exist yet.
+      if ($('#disqussions_wrapper').length === 0) {
+        $('<div id="disqussions_wrapper"></div>').appendTo($('body'));
+      }
+      if ($('#disqus_thread').length === 0) {
+        $('<div id="disqus_thread"></div>').appendTo('#disqussions_wrapper');
+      }
+      else {
+        mainThreadHandler();
+      }
+      if (settings.highlighted) {
+        $('<div id="disqussions_overlay"></div>').appendTo($('body'));
+      }
+
+      // Attach a discussion to each paragraph.
+      $(this).each(function(i) {
+        disqussionNotesHandler(i, $(this));
+      });
+
+      // Display comments count.
+      if (settings.displayCount) {
+        loadDisqusCounter();
+      }
+
+      // Hide the discussion.
+      $('html').click(function(event) {
+        if($(event.target).parents('#disqussions_wrapper, .main-disqussion-link-wrp').length === 0) {
+          hideDisqussion();
+        }
+      });
+
+    }
+  });
+
+  var disqussionNotesHandler = function(i, node) {
+
+    var identifier;
+    // You can force a specific identifier by adding an attribute to the paragraph.
+    if (node.attr('data-disqus-identifier')) {
+      identifier = node.attr('data-disqus-identifier');
+    }
+    else {
+      while ($('[data-disqus-identifier="' + window.location.pathname + settings.identifier + '-' + i + '"]').length > 0) {
+        i++;
+      }
+      identifier = window.location.pathname + settings.identifier + '-' + i;
+    }
+
+    // Create the discussion note.
+    var cls = settings.highlighted ? 'disqussion-link disqussion-highlight' : 'disqussion-link';
+    var a = $('<a class="' + cls + '" />')
+      .attr('href', window.location.pathname + settings.identifier + '-'  + i + '#disqus_thread')
+      .attr('data-disqus-identifier', identifier)
+      .attr('data-disqus-url', window.location.href + settings.identifier + '-' + i)
+      .attr('data-disqus-position', settings.position)
+      .text('+')
+      .wrap('<div class="disqussion" />')
+      .parent()
+      .appendTo('#disqussions_wrapper');
+    a.css({
+      'top': node.offset().top,
+      'left': settings.position == 'right' ? node.offset().left + node.outerWidth() : node.offset().left - a.outerWidth()
+    });
+
+    node.attr('data-disqus-identifier', identifier).mouseover(function() {
+        a.addClass("hovered");
+    }).mouseout(function() {
+        a.removeClass("hovered");
+    });
+
+    // Load the relative discussion.
+    a.delegate('a.disqussion-link', "click", function(e) {
+      e.preventDefault();
+
+      if ($(this).is('.active')) {
+        e.stopPropagation();
+        hideDisqussion();
+      }
+      else {
+        loadDisqus($(this), function(source) {
+          relocateDisqussion(source);
+        });
+      }
+
+    });
+
+  };
+
+  var mainThreadHandler = function() {
+
+    // Create the discussion note.
+    if ($('a.main-disqussion-link').length === 0) {
+
+      var a = $('<a class="main-disqussion-link" />')
+        .attr('href', window.location.pathname + '#disqus_thread')
+        .text('Comments')
+        .wrap('<h2 class="main-disqussion-link-wrp" />')
+        .parent()
+        .insertBefore('#disqus_thread');
+
+      // Load the relative discussion.
+      a.delegate('a.main-disqussion-link', "click", function(e) {
+        e.preventDefault();
+
+        if ($(this).is('.active')) {
+          e.stopPropagation();
+        }
+        else {
+          loadDisqus($(this), function(source) {
+            relocateDisqussion(source, true);
+          });
+        }
+
+      });
+
+    }
+
+  };
+
+  var loadDisqus = function(source, callback) {
+
+    disqus_identifier = source.attr('data-disqus-identifier');
+    disqus_url = source.attr('data-disqus-url');
+
+    if (window.DISQUS) {
+      // If Disqus exists, call its reset method with new parameters.
+      DISQUS.reset({
+        reload: true,
+        config: function () {
+          this.page.identifier = disqus_identifier;
+          this.page.url = disqus_url;
+        }
+      });
+
+    } else {
+
+      // Append the Disqus embed script to <head>.
+      var s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.async = true;
+      s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      $('head').append(s);
+
+    }
+
+    // Add 'active' class.
+    $('a.disqussion-link, a.main-disqussion-link').removeClass('active').filter(source).addClass('active');
+
+    // Highlight
+    if (source.is('.disqussion-highlight')) {
+      highlightDisqussion(disqus_identifier);
+    }
+
+    callback(source);
+
+  };
+
+  var loadDisqusCounter = function() {
+
+    // Append the Disqus count script to <head>.
+    if (!$('script[src*="disqus.com/count.js"]').length) {
+      var s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.async = true;
+      s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+
+      $('head').append(s);
+
+      var limit = 0;
+      var timer = setInterval(function() {
+        limit++;
+        // After script is loaded, show bubles with numbers.
+        if (typeof(DISQUSWIDGETS) === 'object') {
+          $('.disqussion-link').filter(function() {
+            return $(this).text().match(/[1-9]/g);
+          }).addClass("has-comments");
+          clearInterval(timer);
+        }
+        // Don't run forever.
+        if (limit > 10) {
+          clearInterval(timer);
+        }
+      }, 1000)
+
+    }
+
+  };
+
+  var relocateDisqussion = function(el, main) {
+
+    // Move the discussion to the right position.
+    var css = {};
+    if (main === true) {
+      $('#disqus_thread').removeClass("positioned");
+      css = {
+        'position': 'static',
+        'width': 'auto'
+      };
+    }
+    else {
+      $('#disqus_thread').addClass("positioned");
+      css = {
+        'position': 'absolute'
+      };
+    }
+    css.backgroundColor = settings.background;
+
+    var animate = {};
+    if (el.attr('data-disqus-position') == 'right') {
+      animate = {
+        "top": el.offset().top,
+        "left": el.offset().left + el.outerWidth(),
+        "width": Math.min(parseInt($(window).width() - (el.offset().left + el.outerWidth()), 10), settings.maxWidth)
+      };
+    }
+    else if (el.attr('data-disqus-position') == 'left') {
+      animate = {
+        "top": el.offset().top,
+        "left": el.offset().left - Math.min(parseInt(el.offset().left, 10), settings.maxWidth),
+        "width": Math.min(parseInt(el.offset().left, 10), settings.maxWidth)
+      };
+    }
+
+    $('#disqus_thread').stop().fadeIn('fast').animate(animate, "fast").css(css);
+
+  };
+
+  var hideDisqussion = function() {
+
+    $('#disqus_thread').stop().fadeOut('fast');
+    $('a.disqussion-link').removeClass('active');
+
+    // settings.highlighted
+    $('#disqussions_overlay').fadeOut('fast');
+    $('body').removeClass('disqussion-highlight');
+    $('[data-disqus-identifier]').removeClass('disqussion-highlighted');
+
+  };
+
+  var highlightDisqussion = function(identifier) {
+
+    $('body').addClass('disqussion-highlight');
+    $('#disqussions_overlay').fadeIn('fast');
+    $('[data-disqus-identifier]')
+      .removeClass('disqussion-highlighted')
+      .filter('[data-disqus-identifier="' + identifier + '"]:not(".disqussion-link")')
+      .addClass('disqussion-highlighted');
+
+  };
+
+})(jQuery);

@@ -20,14 +20,7 @@
   text-decoration: none;
   cursor: pointer;
   background: #bbbbbb;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  -ms-border-radius: 2px;
-  -o-border-radius: 2px;
   border-radius: 2px;
-  -webkit-transition: all 0.5s;
-  -moz-transition: all 0.5s;
-  -o-transition: all 0.5s;
   transition: all 0.5s;
 }
 .disqussion a.has-comments {
@@ -46,9 +39,6 @@
   display: block;
   content: " ";
   position: absolute;
-  -webkit-transition: all 0.5s;
-  -moz-transition: all 0.5s;
-  -o-transition: all 0.5s;
   transition: all 0.5s;
 }
 .disqussion:hover a, .disqussion.hovered a {
@@ -70,8 +60,6 @@
   top: 0;
   left: 0;
   padding: 5px 15px 0 15px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 .disqussion-highlight #disqus_thread.positioned {
