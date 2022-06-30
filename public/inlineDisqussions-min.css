@@ -84,13 +84,13 @@
   z-index: 9;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 740px) {
   .disqussion {
       left: 14px !important;
       -webkit-transform: translateY(-36px) !important;
       transform: translateY(-36px) !important;
     }
-  .disqus_thread {
+  #disqus_thread {
     opacity: 0.99 !important;
     -webkit-transform: translate(-27px, 24px) !important;
     transform: translate(-27px, 24px) !important;
