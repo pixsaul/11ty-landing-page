@@ -102,6 +102,7 @@
       transform: translateY(-36px) !important;
     }
   .disqus_thread {
-    opacity: 0.99;
+    opacity: 0.99 !important;
+    transform: translate(-28px, 22px) !important;
   }      
   }

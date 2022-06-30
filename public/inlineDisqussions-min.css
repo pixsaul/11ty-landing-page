@@ -91,6 +91,8 @@
       transform: translateY(-36px) !important;
     }
   .disqus_thread {
-    opacity: 0.99;
+    opacity: 0.99 !important;
+    -webkit-transform: translate(-28px, 22px) !important;
+    transform: translate(-28px, 22px) !important;
   }      
   }
